@@ -115,7 +115,7 @@ Definition iso (X : Type) (Y : Type) :=
     (forall x : X, g (f x) = x) /\ (forall y : Y, f (g y) = y).
 
 (** V Coqu lahko uvedemo prikladno notacijo za izomorfizem. *)
-Notation "X <~> Y" := (iso X Y) (at level 100).
+Notation "X <~> Y" := (iso X Y) (at level 60).
 
 Section Izomorfizmi1.
   (** Predpostavimo, da imamo tipe [A], [B] in [C]. *)
