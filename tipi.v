@@ -9,7 +9,7 @@
 
     - _vpeljava_: kako se naredi ali sestavi elemente tipa (konstruktorji)
 
-    - _upraba_: kako se elemente uporabi ali razstavi na sestavne dele (eliminatorji)
+    - _uporaba_: kako se elemente uporabi ali razstavi na sestavne dele (eliminatorji)
 
     - _enačbe_: kakšne enačbe povezujejo konstruktorje in eliminatorje
 *)
@@ -115,7 +115,7 @@ Definition iso (X : Type) (Y : Type) :=
     (forall x : X, g (f x) = x) /\ (forall y : Y, f (g y) = y).
 
 (** V Coqu lahko uvedemo prikladno notacijo za izomorfizem. *)
-Notation "X <~> Y" := (iso X Y) (at level 50).
+Notation "X <~> Y" := (iso X Y) (at level 60).
 
 Section Izomorfizmi1.
   (** Predpostavimo, da imamo tipe [A], [B] in [C]. *)
@@ -254,32 +254,32 @@ Section Izomorfizmi2.
 
   Context {A B C : Type}.
 
-  Definition vaja4_1 : A + B <~> B + A.
+  Lemma vaja4_1 : A + B <~> B + A.
   Proof.
     admit.
   Qed.
 
-  Definition vaja4_2 : (A + B) * C <~> A * C + B * C.
+  Lemma vaja4_2 : (A + B) * C <~> A * C + B * C.
   Proof.
     admit.
   Qed.
 
-  Definition vaja4_3 : (A + B -> C) <~> (A -> C) * (B -> C).
+  Lemma vaja4_3 : (A + B -> C) <~> (A -> C) * (B -> C).
   Proof.
     admit.
   Qed.
 
-  Definition vaja4_4 : Empty_set + A <~> A.
+  Lemma vaja4_4 : Empty_set + A <~> A.
   Proof.
     admit.
   Qed.
 
-  Definition vaja4_5 : (A -> Empty_set) <~> Empty_set.
+  Lemma vaja4_5 : (A -> Empty_set) <~> Empty_set.
   Proof.
     admit.
   Qed.
 
-  Definition vaja5_5 : (Empty_set -> A) <~> unit.
+  Lemma vaja5_5 : (Empty_set -> A) <~> unit.
   Proof.
     admit.
   Qed.
