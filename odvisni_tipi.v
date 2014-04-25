@@ -104,20 +104,16 @@ Section Vaje1.
   (** Spomnimo se vaje iz predikatnega računa: *)
   Lemma vaja_1 : forall n : nat, exists m : nat, n < m.
   Proof.
-    intro n.
-    exists (S n).
-    auto.
+    (* predvanja *)
+    admit.
   Qed.
 
   (** Zapišimo jo s tipi. Enak dokaz še vedno deluje. *)
   Lemma vaja1_2 : forall n : nat, { m : nat & n < m }.
   Proof.
-    intro n.
-    exists (S n).
-    auto.
+    (* predavanja *)
+    admit.
   Qed.
-
-  Print vaja1_2.
 
   (** Kako bi rešili vajo neposredno, z definicijo funkcije?
       Funkcijo, ki bi jo radi napisali, že imamo in jo dobimo
@@ -131,13 +127,12 @@ Section Vaje1.
       To naredimo s taktiko [refine e], kjer je [e] delno zgrajeni izraz.
       Nedokončane dele označimo s podčrtajem [_].
    *)
-  Definition vaja1_3 : forall n : nat, { m : nat & n < m }.
+  Lemma vaja1_3 : forall n : nat, { m : nat & n < m }.
   Proof.
-    refine (fun n : nat => existT _ (S n) _).
-    auto.
+    (* predavanja *)
+    admit.
   Defined.
 
-  Print vaja1_3.
 End Vaje1.
 
 Section Frobenius.
@@ -152,41 +147,24 @@ Section Frobenius.
   Theorem frobenius1 (A : Type) (P : A -> Prop) (Q : Prop) :
     (exists a : A, Q /\ P a) -> Q /\ exists a : A, P a.
   Proof.
-    intros [a [G H]].
-    split.
-    - assumption.
-    - exists a.
-      assumption.
+    (* predavanja *)
+    admit.
   Qed.
-
-  Print frobenius1.
-
-  (* Extra: dokaz logične izvaje direktno. *)
-  Definition frobenius1' (A : Type) (P : A -> Prop) (Q : Prop) :
-    (exists a : A, Q /\ P a) -> Q /\ exists a : A, P a
-    :=
-     fun p =>
-       match p with
-         | ex_intro a H => conj (proj1 H) (ex_intro _ a (proj2 H))
-       end.
 
   (** Tipi (tu pišemo [(.....)%type], sicer Coq misli, da * pomeni množenje
       števil. *)
   Theorem frobenius2 (A : Type) (P : A -> Type) (Q : Type) :
-    ( { a : A & Q * P a } -> Q * { a : A & P a } )%type.
+    ({ a : A & Q * P a } -> Q * { a : A & P a })%type.
   Proof.
-    intros [a [G H]].
-    split.
-    - assumption.
-    - exists a.
-      assumption.
+    (* predavanja *)
+    admit.
   Qed.
 
   (** Neposredna definicija *)
   Definition frobenius3 (A : Type) (P : A -> Type) (Q : Type) :
-    ( { a : A & Q * P a } -> Q * { a : A & P a } )%type
-    :=
-    (fun p => (fst (projT2 p), existT _ (projT1 p) (snd (projT2 p)))).
+    ({ a : A & Q * P a } -> Q * { a : A & P a })%type.
+  (* predavanja *)
+  Admitted.
 
   (** Za vajo naredi isto z obratno implikacijo. Najprej s taktikami: *)
   Theorem frobenius4 (A : Type) (P : A -> Prop) (Q : Prop) :
