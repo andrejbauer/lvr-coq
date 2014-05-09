@@ -25,7 +25,7 @@ Local Open Scope R_scope.
 (** Dokažimo preprosto neenačbo. *)
 Theorem vaja_1 (x y : R) :  x^2 + y^2 >= 2 * x * y.
 Proof.
-  (* Postopek dokaza je naslednja:
+  (* Postopek dokaza je naslednji:
 
      - prenesemo vse na eno stran: x^2 - 2 * x * y + y^2 >= 0
      - faktoriziramo: (x - y)^2 >= 0
@@ -115,14 +115,14 @@ Proof.
 
 
 
-    Lema, ki jo iščemo je [Rminus_le]. O njej izvemo več z ukazom
-    [Check Rminus_le.], ki pove:
+    Lema, ki jo iščemo je [Rminus_ge]. O njej izvemo več z ukazom
+    [Check Rminus_ge.], ki pove:
 
       Rminus_ge : forall r1 r2 : R, r1 - r2 >= 0 -> r1 >= r2
  *)
  apply Rminus_ge.
  (** Sedaj bi radi faktorizirali. To je najlažje narediti tako,
-     da Coq-u povemo, da naj zamenja [x^2 + y^2 - 2 * x * y] s
+     da Coq-u povemo, naj zamenja [x^2 + y^2 - 2 * x * y] s
      kvadratom [(x - y)^2]. Če bi to naredili, bi se nam kasneje
      zataknilo: v knjižnici je kvadrat realnega števila definiran
      kot [Rsqr x]. Zato je bolje, da [Rsqr] uporabimo tudi mi.
