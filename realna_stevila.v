@@ -148,7 +148,7 @@ Proof.
     - (* Tu bi bilo najbolj logično, če bi uporabili poenostavljanje
        izrazov. To se lahko v splošnem naredi s [simpl] in s [compute]. Za delo s
        kolobarji (realna števila tvorijo kolobar, saj tvorijo obseg) imamo taktiki
-       [ring_simpify] in [ring]. Z nekaj poskušanja ugotovimo, da je pravo
+       [ring_simplify] in [ring]. Z nekaj poskušanja ugotovimo, da je pravo
        zaporedje [compute] in [ring]. *)
        compute.
        ring.
