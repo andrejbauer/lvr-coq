@@ -324,7 +324,7 @@ Qed.
 
 (** Pri naslednji nalogah ne potrebuješ indukcije, ker so
     indukcijske hipoteze neuporabne. Namesto [induction t]
-    raje poskusi [destruc t] ali [destruct t as [|u1 u2]]. *)
+    raje poskusi [destruct t] ali [destruct t as [|u1 u2]]. *)
 
 (** Edino drevo globine 0 je prazno drevo. *)
 Lemma globina_0 (t : tree) : depth t = 0 -> t = empty.
