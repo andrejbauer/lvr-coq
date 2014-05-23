@@ -12,7 +12,13 @@ Require Import ZArith.
 Local Open Scope list_scope.
 
 (** Najprej je treba definirati pojma "seznam je urejen" in
-    "seznam [l1] je permutacija seznama [l2]". *)
+    "seznam [l1] je permutacija seznama [l2]". 
+
+    Izkaže se, da je "permutacija" tehnično precej zahtevna.
+    Omejili se bomo na "seznama [l1] in [l2] imata enake elemente".
+    Seznama [1;1;2] in [1;2;2] imata enake elemente in sta
+    enako dolga, a nista permutacija drug drugega.
+*)
 
 (** Seznam je urejen, če je prazen, ima en element, ali je
     oblike [x :: y :: _], kjer je [x <= y] in je rep
@@ -31,53 +37,74 @@ Fixpoint urejen (l : list Z) :=
 
 (** Relacija [In x l] pomeni, da je [x] element seznama [l]. *)
 
-(** Vsi elementi seznama [l1] so vsebovani v seznamu [l2]. *)
-Definition vsebuje (l1 l2 : list Z) :=
-  forall x, In x l1 -> In x l2.
+Fixpoint vsebuje (l1 l2 : list Z) :=
+  match l1 with
+    | nil => True
+    | x :: l => In x l2 /\ vsebuje l l2
+  end.
 
-(** Seznam [l1] je permutacija seznama [l2], če je vsebovan v njem
-    in imata seznama enaki dolžini. *)
-Definition permutiran (l1 l2 : list Z) :=
-  length l1 = length l2 /\ vsebuje l1 l2.
-
-(** Vsak seznam je permutacija samega sebe. *)
-Lemma permutiran_refl (l : list Z) : permutiran l l.
+Lemma vsebuje_In (x : Z) (l1 l2 : list Z) :
+  In x l1 -> vsebuje l1 l2 -> In x l2.
 Proof.
-  split.
-  - reflexivity.
-  - intro ; auto.
+  admit. (* To bo naredil Jernej. *)
 Qed.
 
-(** Če staknemo permutirane sezname, dobimo permutirana seznama. *)
-Lemma permutiran_app (l1 l1' l2 l2' : list Z) :
-  permutiran l1 l1' -> permutiran l2 l2' -> permutiran (l1 ++ l2) (l1' ++ l2').
+(** Seznama [l1] in [l2] imata enake elemente, če sta
+    vsebovana drug v drugem. *)
+Definition enak (l1 l2 : list Z) :=
+  vsebuje l1 l2 /\ vsebuje l2 l1.
+
+(** Osnovne leme o vsebovanosti. *)
+
+Lemma vsebuje_cons (x : Z) (l1 l2 : list Z) :
+  vsebuje l1 l2 -> vsebuje l1 (x :: l2).
 Proof.
-  intros [H1 G1] [H2 G2].
-  split.
-  - rewrite 2 app_length.
-    congruence.
-  - intros x E.
-    apply in_or_app.
-    apply in_app_or in E.
-    destruct E.
-    + left.
-      now apply G1.
-    + right.
-      now apply G2.
+  admit. (* To bo naredil Stepišnik. *)
+Qed.
+
+Lemma vsebuje_refl (l : list Z) : vsebuje l l.
+Proof.
+  induction l.
+  - simpl ; auto.
+  - simpl.
+    split ; auto.
+    now apply vsebuje_cons.
+Qed.
+
+Lemma vsebuje_trans (l1 l2 l3 : list Z) :
+  vsebuje l1 l2 -> vsebuje l2 l3 -> vsebuje l1 l3.
+Proof.
+  admit. (* To bo naredila Eva. *)
 Qed.
     
-(** Če permutiranima seznamoma dodamo element na začetku, dobimo
-    permutirana seznama. *)
-Lemma permutiran_cons (x : Z) (l1 l2 : list Z) :
-  permutiran l1 l2 -> permutiran (x :: l1) (x :: l2).
+(** Vsak seznam je enak sam sebi. *)
+Lemma enak_refl (l : list Z) : enak l l.
+Proof.
+  split ; apply vsebuje_refl.
+Qed.
+
+(** Če staknemo enake sezname, dobimo enaka seznama. *)
+
+Lemma vsebuje_app (l1 l1' l2 l2' : list Z) :
+  vsebuje l1 l1' -> vsebuje l2 l2' -> vsebuje (l1 ++ l2) (l1' ++ l2').
+Proof.
+  admit. (* To bo naredil Janoš. *)
+Qed.
+
+Lemma enak_app (l1 l1' l2 l2' : list Z) :
+  enak l1 l1' -> enak l2 l2' -> enak (l1 ++ l2) (l1' ++ l2').
+Proof.
+  intros [H1 G1] [H2 G2].
+  split ; now apply vsebuje_app.
+Qed.
+    
+(** Če enakima seznamoma dodamo element na začetku, dobimo
+    enaka seznama. *)
+Lemma enak_cons (x : Z) (l1 l2 : list Z) :
+  enak l1 l2 -> enak (x :: l1) (x :: l2).
 Proof.
   intros [H1 H2].
-  split.
-  - simpl ; congruence.
-  - intros y G.
-    destruct G.
-    + rewrite H ; simpl ; auto.
-    + simpl ; auto.
+  split ; simpl ; auto using vsebuje_cons.
 Qed.
 
 (** Potrebovali bomo tudi operacije, ki sezname razdelijo na dva
