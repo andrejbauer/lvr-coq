@@ -84,7 +84,6 @@ Proof.
 Qed.
 
 (** Če staknemo enake sezname, dobimo enaka seznama. *)
-
 Lemma vsebuje_app (l1 l1' l2 l2' : list Z) :
   vsebuje l1 l1' -> vsebuje l2 l2' -> vsebuje (l1 ++ l2) (l1' ++ l2').
 Proof.
@@ -110,7 +109,6 @@ Qed.
 (** Potrebovali bomo tudi operacije, ki sezname razdelijo na dva
     podseznama. Na primer, v urejanju z zlivanjem seznam razdelimo
     takole: *)
-
 Fixpoint razpolovi (l : list Z) :=
   match l with
     | nil => (nil, nil)
@@ -209,7 +207,7 @@ Fixpoint najmanjsi (x : Z) (l : list Z) : Z :=
 
 Eval compute in (najmanjsi 4 (10 :: 1 :: 1 :: 3 :: 8 :: 7 :: 5 :: nil)%Z).
 
-(** Osnovne lemen o najmanjsinih elementih. *)
+(** Osnovne leme o najmanjsih elementih. *)
 
 Lemma najmanjsi_inv (x : Z) (l : list Z) :
   x = najmanjsi x l \/ In (najmanjsi x l) l.
