@@ -181,7 +181,7 @@ Eval compute in (najmanjsi 4 (10 :: 1 :: 1 :: 3 :: 8 :: 7 :: 5 :: nil)%Z).
 (** Tako povemo, da želimo pripadajoči program v OCamlu. *)
 Recursive Extraction najmanjsi.
 
-(** Osnovne lemen o najmanjsinih elementih. *)
+(** Osnovne leme o najmanjsih elementih. *)
 
 Lemma najmanjsi_inv (x : Z) (l : list Z) :
   x = najmanjsi x l \/ In (najmanjsi x l) l.
