@@ -10,6 +10,7 @@ Require Import ZArith.
 
 (** Aktiviramo notacijo za sezname. *)
 Local Open Scope list_scope.
+Local Open Scope Z_scope.
 
 (** Najprej je treba definirati pojma "seznam je urejen" in
     "seznam [l1] je permutacija seznama [l2]". 
@@ -27,17 +28,56 @@ Fixpoint urejen (l : list Z) :=
   match l with
     | nil => True
     | _ :: nil => True
-    | x :: ((y :: _) as l') => (x <= y)%Z /\ urejen l'
+    | x :: ((y :: _) as l') => x <= y /\ urejen l'
   end.
+
+(** Razne koristne leme o urejenosti. *)
+
+Lemma urejen_tail (x : Z) (l : list Z) :
+  urejen (x :: l) -> urejen l.
+Proof.
+  induction l ; firstorder.
+Qed.
+
+Lemma urejen_head (x : Z) (l : list Z) :
+  urejen (x :: l) -> forall y, In y l -> x <= y.
+Proof.
+  generalize x ; clear x.
+  induction l.
+  - simpl ; tauto.
+  - intros x [H G] z [K|K].
+    + now destruct K.
+    + transitivity a ; auto.
+Qed.
+
+Lemma urejen_lt_cons (x : Z) (l : list Z) :
+  (forall y : Z, In y l -> x <= y) -> urejen l -> urejen (x :: l).
+Proof.
+  intros H G.
+  induction l ; [ simpl ; auto | idtac ].
+  split.
+  - apply H ; simpl ; auto.
+  - destruct l ; simpl ; auto.
+Qed.
 
 (** Za permutacije potrebujemo funkcijo, ki prešteje, kolikokrat
     se dano število [k] pojavi v seznamu [l]. *)
-Fixpoint pojavi (x : Z) (l : list Z) :=
+Fixpoint pojavi (x : Z) (l : list Z) : nat :=
   match l with
-    | nil => 0
+    | nil => O
     | y :: l' =>
-      if Z.eqb x y then S (pojavi x l') else pojavi x l'
+      if x =? y then S (pojavi x l') else pojavi x l'
   end.
+
+Eval compute in pojavi 3 (1 :: 4 :: 3 :: 3 :: 2 :: 3 :: 1 :: 3 :: nil).
+
+(** Zveza med [pojavi] in stikanjem seznamov. *)
+Lemma pojavi_app (x : Z) (l1 l2 : list Z) :
+  pojavi x (l1 ++ l2) = (pojavi x l1 + pojavi x l2)%nat.
+Proof.
+  induction l1 ; simpl ; auto.
+  case (x =? a) ; omega.
+Qed.
 
 (** Seznama [l1] in [l2] sta enaka, če imata isto število pojavitev
     za vsak [x]. *)
@@ -66,13 +106,6 @@ Proof.
   transitivity (pojavi x l2) ; auto.
 Qed.
   
-(** Zveza med [pojavi] in stikanjem seznamov. *)
-Lemma pojavi_app (x : Z) (l1 l2 : list Z) : pojavi x (l1 ++ l2) = pojavi x l1 + pojavi x l2.
-Proof.
-  induction l1 ; simpl ; auto.
-  case ((x =? a)%Z) ; omega.
-Qed.
-
 (** Potrebovali bomo tudi operacije, ki sezname razdelijo na dva
     podseznama. Na primer, v urejanju z zlivanjem seznam razdelimo
     takole: *)
@@ -117,12 +150,12 @@ Fixpoint list_ind_2
 
 Lemma razpolovi_length (l : list Z) :
   match razpolovi l with
-    | (l1, l2) => length l = length l1 + length l2
+    | (l1, l2) => length l = (length l1 + length l2)%nat
   end.
 Proof.
   apply (list_ind_2 (fun l =>
                       let (l1, l2) := razpolovi l in
-                        length l = length l1 + length l2)) ;
+                        length l = length l1 + length l2))%nat ;
     simpl ; auto.
   intros x y l' H.
   replace (razpolovi l') with (fst (razpolovi l'), snd (razpolovi l')) in * |- * ;
@@ -149,7 +182,7 @@ Eval compute in (razdeli (Z.leb 5) (10 :: 1 :: 1 :: 3 :: 8 :: 7 :: 5 :: nil)%Z).
  
 Lemma razdeli_length (p : Z -> bool) (l : list Z) :
   let (l1, l2) := razdeli p l in
-    length l = length l1 + length l2.
+    length l = (length l1 + length l2)%nat.
 Proof.
   induction l.
   - simpl ; auto.
@@ -224,9 +257,9 @@ Proof.
 Qed.
 
 Lemma najmanjsi_spodna_meja (x : Z) (l : list Z) :
-  forall y, In y (x :: l) -> (najmanjsi x l <= y)%Z.
+  forall y, In y (x :: l) -> najmanjsi x l <= y.
 Proof.
   intros y [H|H].
   - rewrite H ; apply najmanjsi_head.
   - now apply najmanjsi_tail.
-Qed. 
+Qed.
